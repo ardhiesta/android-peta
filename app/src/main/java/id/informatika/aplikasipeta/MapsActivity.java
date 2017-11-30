@@ -14,6 +14,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Locale;
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -43,11 +45,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-        LatLng home = new LatLng(-7.56, 110.85);
-        float zoom = 15;
-        mMap.addMarker(new MarkerOptions().position(home).title("Marker in Sydney"));
+        LatLng sydney = new LatLng(-34, 151);
+        LatLng home = new LatLng(-7.561023, 110.856772);
+        float zoom = 17;
+        mMap.addMarker(new MarkerOptions().position(home).title("posisi"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, zoom));
+
+        setMapLongClick(mMap);
     }
 
     @Override
@@ -76,5 +80,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setMapLongClick(final GoogleMap map) {
+        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                String snippet = String.format(Locale.getDefault(),
+                        "Lat: %1$.5f, Long: %2$.5f",
+                        latLng.latitude,
+                        latLng.longitude);
+                map.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title("marker")
+                        .snippet(snippet));
+            }
+        });
     }
 }
